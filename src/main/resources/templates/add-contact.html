@@ -1,0 +1,50 @@
+<!--
+This HTML file defines the structure and layout of the addTeam page
+which includes a form where a user can add a team to the database
+Name: Amos Turner
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Contact</title>
+    <!-- Bootstrap 5 flag-->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+</head>
+<body>
+<header>
+    <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/add-contact">Add Contact</a></li>
+        <li><a href="/list-contacts">List Contacts</a></li>
+        <li><a href="/register-user">Register User</a></li>
+    </ul>
+</header>
+<br>
+<section>
+    <h2>Add Contact</h2>
+    <form method="post" action="#" th:action="@{/addContact}" th:object="${myContact}">
+<!--make sure myContact is in controller-->
+        <input type="hidden" th:field="*{id}">
+        <label>Name:</label><br>
+        <input type="text" placeholder="Name..." th:field="*{name}"><br>
+        <label>Phone Number</label><br>
+        <input type="tel" th:field="*{phoneNumber}"><br>
+        <label>Address:</label><br>
+        <input type="text" placeholder="Address..." th:field="*{address}"><br>
+        <label>Email:</label><br>
+        <input type="text" placeholder="Email..." th:field="*{email}"><br>
+        <input type="submit" value="Add Contact!">
+    </form>
+</section>
+<br>
+<footer>
+    <h4>&copy; 2021 by Amos Turner All rights reserved.</h4>
+</footer>
+</body>
+</html>
