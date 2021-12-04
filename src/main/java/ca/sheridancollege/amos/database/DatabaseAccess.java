@@ -25,7 +25,7 @@ public class DatabaseAccess {
 
     public List<Contact> findById(int id) {
         MapSqlParameterSource namedParameters= new MapSqlParameterSource();
-        String query = "SELECT * FROM Contacts WHERE id = :id";
+        String query = "SELECT * FROM contacts WHERE id = :id";
         namedParameters.addValue("id", id);
         return jdbc.query(query, namedParameters, new BeanPropertyRowMapper<Contact>(Contact.class));
     }
@@ -33,12 +33,13 @@ public class DatabaseAccess {
     public int save(Contact contact) {
         MapSqlParameterSource namedParameters= new MapSqlParameterSource();
         KeyHolder generatedKeyHolder= new GeneratedKeyHolder();
-        String query = "INSERT INTO contacts(name, phoneNumber, address, email," +
+        String query = "INSERT INTO contacts(name, phoneNumber, address, email)" +
                 "VALUES(:name, :phoneNumber, :address, :email)";
         namedParameters.addValue("name", contact.getName());
         namedParameters.addValue("phoneNumber", contact.getPhoneNumber());
         namedParameters.addValue("address", contact.getAddress());
         namedParameters.addValue("email", contact.getEmail());
+        System.out.println("Student inserted");
 
         jdbc.update(query, namedParameters, generatedKeyHolder);
         return (int) generatedKeyHolder.getKey(); // Is this int or Long?

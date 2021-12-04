@@ -4,9 +4,7 @@ import ca.sheridancollege.amos.beans.Contact;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +15,7 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    // Autowired needed?
+    // Autowired needed and private?
     ModelAndView mv;
 
     @GetMapping("/")
@@ -26,19 +24,27 @@ public class HomeController {
         return mv;
     }
 
+    // TODO use ModelAndView instead
     @GetMapping("/add-contact")
-    public ModelAndView addContactPage() {
-        mv = new ModelAndView("add-contact", "myContact", new Contact());
-        return mv;
+    public String addContactPage(Model model) {
+        model.addAttribute("myContact", new Contact());
+        return "add-contact";
+    }
+
+    // TODO use ModelAndView instead
+    @PostMapping("/addContact")
+    public String processContact(RestTemplate restTemplate) {
+        return "redirect:/add-contact";
     }
 
     // TODO change "/changeName"
-    @GetMapping("/changeName")
+    @GetMapping("/list-contacts")
     public String viewContacts(Model model, RestTemplate restTemplate) {
         ResponseEntity<Contact[]> responseEntity = 			restTemplate.getForEntity
                 ("http://localhost:8080/contacts", Contact[].class);
         model.addAttribute("contactList", responseEntity.getBody());
-        return "home";
+//       TODO use home or list-contacts?
+        return "list-contacts";
     }
 
     @GetMapping(value="/getContact/{id}", produces="application/json")
