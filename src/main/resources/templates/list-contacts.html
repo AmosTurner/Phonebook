@@ -20,14 +20,8 @@ Name: Amos Turner
     <script th:src="@{/js/script.js}"></script>
 </head>
 <body>
-<header>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/add-contact">Add Contact</a></li>
-        <li><a href="/list-contacts">List Contacts</a></li>
-        <li><a href="/register-user">Register User</a></li>
-    </ul>
-</header>
+<header th:insert ="fragments/header.html :: header"></header>
+
 <br>
 <section>
     <h2>List of Contacts</h2>
@@ -43,19 +37,20 @@ Name: Amos Turner
             <td th:text="${c.phoneNumber}"></td>
             <td th:text="${c.address}"></td>
             <td th:text="${c.email}"></td>
+            <td><a th:href="@{'editTeam/' + ${c.id}}">Edit</a>
+            <td><a th:href="@{'deleteTeam/' + ${c.id}}">Delete</a>
         </tr>
     </table>
 </section>
-<h3 th:each="c: ${contactList}">
-    <h1>test</h1>
-    <a href="#"
-       th:onclick="'getContact('+ ${c.id} + ')'"
-       th:text="${c.name}"></a>
-    <div th:id="'contact' + ${c.id}"></div>
-</h3>
+<!--<h3 th:each="c: ${contactList}">-->
+<!--    <h1>test</h1>-->
+<!--    <a href="#"-->
+<!--       th:onclick="'getContact('+ ${c.id} + ')'"-->
+<!--       th:text="${c.name}"></a>-->
+<!--    <div th:id="'contact' + ${c.id}"></div>-->
+<!--</h3>-->
 <br>
-<footer>
-    <h4>&copy; 2021 by Amos Turner All rights reserved.</h4>
-</footer>
+<footer th:replace ="fragments/footer.html :: footer"></footer>
+
 </body>
 </html>

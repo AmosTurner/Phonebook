@@ -22,8 +22,8 @@ Name: Amos Turner
 <br>
 <section>
     <h2>Add Contact</h2>
-    <form method="post" action="#" th:action="@{/addContact}" th:object="${contact}">
-<!--make sure myContact is in controller-->
+    <form method="post" action="#" th:action="@{/updateTeam}" th:object="${contact}">
+        <!--make sure myContact is in controller-->
         <input type="hidden" th:field="*{id}">
         <label>Name:</label><br>
         <input type="text" placeholder="Name..." th:field="*{name}"><br>

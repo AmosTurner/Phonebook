@@ -17,14 +17,8 @@ Name: Amos Turner
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
-<header>
-    <ul>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/add-contact">Add Contact</a></li>
-        <li><a href="/list-contacts">List Contacts</a></li>
-        <li><a href="/register-user">Register User</a></li>
-    </ul>
-</header>
+<header th:insert ="fragments/header.html :: header"></header>
+
 <br>
 
 <h2>
@@ -41,9 +35,7 @@ Name: Amos Turner
         <p style="width: 200px">Placeholder exaplaining the application</p>
     </div>
 </section>
-<footer>
-    <h4>&copy; 2021 by Amos Turner All rights reserved.</h4>
-</footer>
+<footer th:replace ="fragments/footer.html :: footer"></footer>
 
 </body>
 </html>

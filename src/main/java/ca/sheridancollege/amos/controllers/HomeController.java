@@ -27,15 +27,16 @@ public class HomeController {
     // TODO use ModelAndView instead
     @GetMapping("/add-contact")
     public String addContactPage(Model model) {
-        model.addAttribute("myContact", new Contact());
+        model.addAttribute("contact", new Contact());
         return "add-contact";
     }
 
-    // TODO use ModelAndView instead
-    @PostMapping("/addContact")
-    public String processContact(RestTemplate restTemplate) {
-        return "redirect:/add-contact";
-    }
+//    // TODO use ModelAndView instead
+//    @PostMapping("/addContact")
+//    public String processContact() {
+//        System.out.println("post mapping redirect");
+//        return "redirect:/add-contact";
+//    }
 
     // TODO change "/changeName"
     @GetMapping("/list-contacts")
@@ -56,4 +57,18 @@ public class HomeController {
             data.put("contact", responseEntity.getBody());
             return data;
         }
+
+//    // TODO contact name is used as the object in HTML
+//    @PostMapping(value = "/addContact", produces ="application/json")
+//    // ResponseBody tells controller this should not request dispatch to Thymeleaf like other controller methods
+//    @ResponseBody
+//    public Map<String, Object> addContact(@PathVariable int id, RestTemplate restTemplate) {
+//        System.out.println("home controller post"); // test
+//        Map<String, Object> data = new HashMap<String, Object>();
+//        ResponseEntity<Contact> responseEntity = restTemplate.getForEntity
+//                ("http://localhost:8080/contacts/ + id", Contact.class);
+////        model.addAttribute("contact", responseEntity.getBody());
+//        data.put("contact", responseEntity.getBody());
+//        return data;
+//    }
 }

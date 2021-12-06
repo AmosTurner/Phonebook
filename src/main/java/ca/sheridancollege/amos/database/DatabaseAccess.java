@@ -39,10 +39,17 @@ public class DatabaseAccess {
         namedParameters.addValue("phoneNumber", contact.getPhoneNumber());
         namedParameters.addValue("address", contact.getAddress());
         namedParameters.addValue("email", contact.getEmail());
-        System.out.println("Student inserted");
+        System.out.println("saved");
 
         jdbc.update(query, namedParameters, generatedKeyHolder);
         return (int) generatedKeyHolder.getKey(); // Is this int or Long?
+    }
+
+    public void deleteById(int id) {
+        MapSqlParameterSource namedParameters= new MapSqlParameterSource();
+        String query = "DELETE FROM contacts where id = :id";
+        namedParameters.addValue("id", id);
+        jdbc.update(query, namedParameters);
     }
 
     public void deleteAll() {
@@ -62,4 +69,16 @@ public class DatabaseAccess {
             save(c);
         }
     }
+
+    public void updateContact(Contact contact) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        String query = "UPDATE contacts SET name = :name, phoneNumber= :phoneNumber, address= :address, " +
+                "email= :email";
+        namedParameters.addValue("name", contact.getName());
+        namedParameters.addValue("phoneNumber", contact.getPhoneNumber());
+        namedParameters.addValue("address", contact.getAddress());
+        namedParameters.addValue("email", contact.getEmail());
+        jdbc.update(query, namedParameters);
+    }
+
 }
