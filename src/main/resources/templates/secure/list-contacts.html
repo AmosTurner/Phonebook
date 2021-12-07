@@ -6,7 +6,7 @@ Name: Amos Turner
 -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <!--add html fragments for header and footer-->
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +23,17 @@ Name: Amos Turner
 <header th:insert ="fragments/header.html :: header"></header>
 
 <br>
+<div sec:authorize="isAuthenticated()">
+    User's Name: <span sec:authentication="name"></span><br>
+    Roles: <span sec:authentication="principal.authorities">
+</span><br><br>
+    <div>
+        <form method="get" action="#" th:action="@{/logout}">
+            <input type="submit" value="Logout" />
+        </form>
+    </div>
+</div>
+
 <section>
     <h2>List of Contacts</h2>
     <table style="width:50%" th:if="${contactList != null && contactList !=''}">
@@ -37,8 +48,8 @@ Name: Amos Turner
             <td th:text="${c.phoneNumber}"></td>
             <td th:text="${c.address}"></td>
             <td th:text="${c.email}"></td>
-            <td><a th:href="@{'editTeam/' + ${c.id}}">Edit</a>
-            <td><a th:href="@{'deleteTeam/' + ${c.id}}">Delete</a>
+            <td><a th:href="@{'contacts/' + ${c.id}}">Edit</a>
+            <td><a th:href="@{'contacts/' + ${c.id}}">Delete</a>
         </tr>
     </table>
 </section>

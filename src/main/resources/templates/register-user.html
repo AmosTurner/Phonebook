@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-
+springsecurity5">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register User</title>
+    <script th:src="@{/js/script.js}"></script>
+    <!-- Bootstrap 5 flag-->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
-
+<h1>Register Here!</h1>
+<div id="error" class="error"></div>
+<form name="form" action="#" th:action="@{/register}" method="post"
+      onsubmit="return verify()">
+    Email: <input type= "email" name="username" /><br>
+    Password: <input type="password" name="password" /><br>
+    Verify Password: <input type="password" name="verifyPassword" /><br>
+    <input type="submit" value="Add User">
+</form>
+<p><a href="/home" th:href="@{/home}">Back to home page</a></p>
 </body>
 </html>

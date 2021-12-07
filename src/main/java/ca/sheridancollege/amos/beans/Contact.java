@@ -16,5 +16,4 @@ public class Contact implements Serializable {
     private String phoneNumber;
     private String address;
     private String email;
-    private Boolean role;
 }
