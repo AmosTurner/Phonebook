@@ -1,3 +1,4 @@
+-- creates a table for storing contact information
 CREATE TABLE contacts (
                           ID int NOT NULL AUTO_INCREMENT,
                           Name VARCHAR(20)  NOT NULL,
@@ -7,6 +8,7 @@ CREATE TABLE contacts (
                           PRIMARY KEY (ID)
 );
 
+-- TODO add comments
 CREATE TABLE sec_user (
                           userId            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                           email             VARCHAR(75) NOT NULL UNIQUE,

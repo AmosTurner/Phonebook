@@ -23,28 +23,50 @@ import java.util.Map;
     add data validation for form
     use tables for forms
     Security config error needs to be fixed
+    remove preexisting users in the database
+    Choose either ModelAndView, String, etc for resources
+    Add member, guest, admin roles
+    add message in register page for success and error messages
+    Fix access denied template and rename to access-denied
+    spacing horizontal should not be too long
+    reformat code
+ */
+
+/**
+ * TODO add comments The rest controller...
+ *
+ * @author Amos Turner
+ * @since 2021-12-08
  */
 @RestController
 @RequestMapping("/contacts")
 public class ContactController {
 
     @Autowired
-//    @Lazy
+//    @Lazy TODO is this needed?
     DatabaseAccess da;
 
-    // returns all records; all the contacts in the database
-    @GetMapping
+    /**
+     * Retrieves all contacts in the database
+     *
+     * @return a list of contacts
+     */
+    @GetMapping("getAll")
     public List<Contact> getStudentCollection() {
         return da.findAll();
     }
 
-    // returns a contact by ID
+    /**
+     * Retrieves a contact by their id
+     *
+     * @return a contact requested
+     */
     @GetMapping("/{id}")
     public Contact getIndividualContact(@PathVariable int id) {
         return da.findById(id).get(0);
     }
 
-    // deletes existing data and overwrites it
+    // TODO add comments deletes existing data and overwrites it
     @PutMapping(consumes="application/json")
     public String putContactCollection(@RequestBody List<Contact> contactList) {
         da.deleteAll();
@@ -53,12 +75,11 @@ public class ContactController {
         return "Total Records: " + da.count();
     }
 
-    @PostMapping(value = "/addContact")
-    @ResponseBody
-    public String postContact(@ModelAttribute Contact contact, RestTemplate restTemplate) { // requests body parses through the JSON file
-        System.out.println("post");
-        da.save(contact);
-        return "add-contact";
+    // TODO add comments
+    @PostMapping("/saveContact")
+    public ResponseEntity<Integer> saveContact(@RequestBody Contact contact) { // requests body parses through the JSON file
+        int id = da.save(contact);
+        return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
     }
 
 //    @PostMapping(value = "/addContact", consumes = "application/json")
@@ -67,6 +88,7 @@ public class ContactController {
 //        return da.save(contact);
 //    }
 
+    // TODO add comments
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteContact(@PathVariable(value = "id") int id) {
         System.out.println("test 1");
@@ -82,21 +104,21 @@ public class ContactController {
 //        return new ResponseEntity(HttpStatus.OK);
 //    }
 
-    @GetMapping("/editTeam/{id}")
-    public String editTeam(Model model, @PathVariable int id) {
-        Contact contact = da.findById(id).get(0);
-        model.addAttribute("contacts", da.findAll());
-        model.addAttribute("contact", contact);
-        return "edit-contact";
-    }
-
-    @PostMapping("/updateTeam")
-    public String updateTeam(Model model, @ModelAttribute Contact contact) {
-
-        da.updateContact(contact);
-        model.addAttribute("contacts", da.findAll());
-        model.addAttribute("contact", new Contact()); // write "contact"?
-        return "redirect:/list-contacts";
-    }
+//    @GetMapping("/editContact/{id}")
+//    public String editTeam(Model model, @PathVariable int id) {
+//        Contact contact = da.findById(id).get(0);
+//        model.addAttribute("contacts", da.findAll());
+//        model.addAttribute("contact", contact);
+//        return "edit-contact";
+//    }
+//
+//    @PostMapping("/updateTeam")
+//    public String updateTeam(Model model, @ModelAttribute Contact contact) {
+//
+//        da.updateContact(contact);
+//        model.addAttribute("contacts", da.findAll());
+//        model.addAttribute("contact", new Contact()); // write "contact"?
+//        return "redirect:/list-contacts";
+//    }
 
 }

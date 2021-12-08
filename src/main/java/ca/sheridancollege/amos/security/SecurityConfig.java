@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Provides security to the web application by preventing CSRF attacks and Session Fixation attacks
+ */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -21,6 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
+    /**
+     * Bean for using the BCrypt strong hashing function
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -33,13 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .passwordEncoder(passwordEncoder());
 //    }
 
+    /**
+     * Restricts request made from the user for templates under the secure folder
+     * and informs Spring Boot that logout operations should invalidate the HTTP sessions and clear in memory
+     * authentication credentials
+     *
+     * @param http - TODO add comments
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
         http.authorizeRequests()
-                .antMatchers("/secure/**").hasRole("ADMIN")
+                .antMatchers("/secure/**").hasRole("USER") // TODO changed form admin to user
                 .antMatchers("/", "/js/**", "/css/**", "/images/**", "/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll() // TODO changed this from register to register_user

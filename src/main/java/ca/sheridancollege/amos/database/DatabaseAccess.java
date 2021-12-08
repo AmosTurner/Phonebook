@@ -16,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This classes manipulates the contact database using CRUD operations
+ *
+ * @author Amos Turner
+ * @since 2021-12-08
+ */
 @Repository
 public class DatabaseAccess {
 
@@ -25,6 +31,11 @@ public class DatabaseAccess {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Finds the user associated to an email address
+     *
+     * @return User object matching the email
+     */
     public User findUserAccount(String email) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -38,6 +49,9 @@ public class DatabaseAccess {
             return null;
     }
 
+    /**
+     * Retrieves user roles for a given user id
+     */
     public List<String> getRolesById(Long userId) {
 
         ArrayList<String> roles = new ArrayList<String>();
@@ -54,6 +68,12 @@ public class DatabaseAccess {
         return roles;
     }
 
+    /**
+     * Adds the user to the database
+     *
+     * @param email - string representing the users email
+     * @param password - string representing the users password
+     */
     public void addUser(String email, String password){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String query = "INSERT INTO sec_user"
@@ -64,6 +84,7 @@ public class DatabaseAccess {
         jdbc.update(query, parameters);
     }
 
+    // TODO add comments
     public void addRole(Long userId, Long roleId) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String query = "INSERT INTO user_role(userId, roleId)"
@@ -115,6 +136,7 @@ public class DatabaseAccess {
         jdbc.update(query, namedParameters);
     }
 
+    // TODO not needed?
     public int count() { // is the return type Integer or int?
         MapSqlParameterSource namedParameters= new MapSqlParameterSource();
         String query = "SELECT count(*) FROM contacts";

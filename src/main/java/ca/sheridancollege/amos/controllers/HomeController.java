@@ -18,135 +18,158 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO should this be homeController or contactController?
+/**
+ * The Home Controller is used for intercepting requests from Thymeleaf Templates
+ *
+ * @author Amos Turner
+ * @since 2021-12-08
+ */
 @Controller
 public class HomeController {
 
     @Autowired
     @Lazy
-    private DatabaseAccess da;
+    private DatabaseAccess da; // Database Object that is manipulating databases in H2
 
-    // Autowired needed and private?
+    // TODO use this?
     ModelAndView mv;
 
+    /**
+     * Root of the web application
+     *
+     * @return the home template
+     */
     @GetMapping("/")
     public ModelAndView processHomePage() {
         mv = new ModelAndView("home");
         return mv;
     }
 
+    /**
+     * Home page of the web application
+     *
+     * @return the home template
+     */
     @GetMapping("/home")
     public ModelAndView homePage() {
         mv = new ModelAndView("home");
         return mv;
     }
 
+    /**
+     * Directs user to add-contact template if they are authorized
+     *
+     * @return a string representing the add-contact template
+     */
     @GetMapping("/secure/add-contact")
-    public String secureAddContagePage(Authentication authentication, Model model){
+    public String secureAddContactPage(Authentication authentication, Model model) {
 
         String email = authentication.getName();
-        List<String> roleList= new ArrayList<String>();
-        for (GrantedAuthority ga: authentication.getAuthorities()) {
+        List<String> roleList = new ArrayList<String>();
+        for (GrantedAuthority ga : authentication.getAuthorities()) {
             roleList.add(ga.getAuthority());
         }
         model.addAttribute("email", email);
         model.addAttribute("roleList", roleList);
+        model.addAttribute("contact", new Contact());
 
-        return "/add-contact"; // fix resource here
+        return "/secure/add-contact";
     }
 
+    /**
+     * Directs user to list-contacts template if they are authorized
+     *
+     * @return a string representing the list-contacts template
+     */
     @GetMapping("/secure/list-contacts")
-    public String secureListContactsPage(Authentication authentication, Model model){
+    public String secureListContactsPage(Authentication authentication, Model model, RestTemplate restTemplate) {
 
-        String email = authentication.getName();
-        List<String> roleList= new ArrayList<String>();
-        for (GrantedAuthority ga: authentication.getAuthorities()) {
+        String email = authentication.getName(); // fix suggestions here
+        List<String> roleList = new ArrayList<String>();
+        for (GrantedAuthority ga : authentication.getAuthorities()) {
             roleList.add(ga.getAuthority());
         }
         model.addAttribute("email", email);
         model.addAttribute("roleList", roleList);
 
-        return "/list-contacts"; // fix resource here
+        ResponseEntity<Contact[]> responseEntity = restTemplate.getForEntity
+                ("http://localhost:8080/contacts/getAll", Contact[].class);
+        model.addAttribute("contactList", responseEntity.getBody());
+
+        return "/secure/list-contacts";
     }
 
+    /**
+     * Directs user to login for entering user credentials
+     *
+     * @return a string representing the login template
+     */
     @GetMapping("/login")
-    public String loginPage(){
-
+    public String loginPage() {
         return "login";
     }
 
-
+    /**
+     * Directs user to a page indicating they do not have valid authorization
+     *
+     * @return a string representing the accessdenied template
+     */
     @GetMapping("/permission_denied")
-    public String noPermission(){
+    public String noPermission() {
 
         return "/error/accessdenied";
     }
 
-//    @GetMapping("/register")
-//    public String getRegister() {
-//        return "register-user";
-//    }
-
-    // should be in user controller
+    // TODO should be in user controller
     @PostMapping("/register")
     public String postRegister(@RequestParam String username, @RequestParam String password) {
         da.addUser(username, password);
-        Long userId= da.findUserAccount(username).getUserId();
-        da.addRole(userId, Long.valueOf(2));
+        Long userId = da.findUserAccount(username).getUserId();
+        da.addRole(userId, Long.valueOf(2)); // TODO originally 2
 
-        return "redirect:/";
+        return "redirect:/register-user";
     }
 
+    /**
+     * Directs user to registration page for creating a new user
+     *
+     * @return a string representing the register-user template
+     */
     @GetMapping("/register-user")
     public String registerUserPage(Model model) {
         return "register-user";
     }
 
-    // TODO use ModelAndView instead
-    @GetMapping("/add-contact")
-    public String addContactPage(Model model) {
-        model.addAttribute("contact", new Contact());
-        return "add-contact";
-    }
-
-//    // TODO use ModelAndView instead
-//    @PostMapping("/addContact")
-//    public String processContact() {
-//        System.out.println("post mapping redirect");
-//        return "redirect:/add-contact";
-//    }
-
-    // TODO change "/changeName"
-    @GetMapping("/list-contacts")
-    public String viewContacts(Model model, RestTemplate restTemplate) {
-        ResponseEntity<Contact[]> responseEntity = 			restTemplate.getForEntity
-                ("http://localhost:8080/contacts", Contact[].class);
-        model.addAttribute("contactList", responseEntity.getBody());
-//       TODO use home or list-contacts?
-        return "/secure/list-contacts";
-    }
-
-    @GetMapping(value="/getContact/{id}", produces="application/json")
+    /**
+     * TODO add comments
+     *
+     * @return
+     */
+    @GetMapping(value = "/getContact/{id}", produces = "application/json")
     @ResponseBody
     public Map<String, Object> getContact(@PathVariable int id, RestTemplate restTemplate) {
         Map<String, Object> data = new HashMap<String, Object>();
         ResponseEntity<Contact> responseEntity = restTemplate.getForEntity
-                    ("http://localhost:8080/contacts/" + id, Contact.class);
-            data.put("contact", responseEntity.getBody());
-            return data;
-        }
-
-    // TODO contact name is used as the object in HTML
-    @GetMapping(value = "/addContact")
-    // ResponseBody tells controller this should not request dispatch to Thymeleaf like other controller methods
-    @ResponseBody
-    public Map<String, Object> addContact(RestTemplate restTemplate) {
-        System.out.println("home controller post"); // test
-        Map<String, Object> data = new HashMap<String, Object>();
-        ResponseEntity<Contact> responseEntity = restTemplate.getForEntity
-                ("http://localhost:8080/add-contact/", Contact.class);
-//        model.addAttribute("contact", responseEntity.getBody());
+                ("http://localhost:8080/contacts/" + id, Contact.class);
         data.put("contact", responseEntity.getBody());
         return data;
     }
+
+    /**
+     * TODO add comments
+     *
+     * @return
+     */
+    @PostMapping("/addContact")
+    // ResponseBody tells controller this should not request dispatch to Thymeleaf like other controller methods
+//    @ResponseBody
+    public String addContact(RestTemplate restTemplate, Model model) {
+        System.out.println("home controller post"); // test
+
+        ResponseEntity<Contact> responseEntity = restTemplate.getForEntity
+                ("http://localhost:8080/contacts/saveContact", Contact.class);
+        model.addAttribute("contact", responseEntity.getBody());
+        return "redirect:/secure/add-contact";
+    }
+
 }

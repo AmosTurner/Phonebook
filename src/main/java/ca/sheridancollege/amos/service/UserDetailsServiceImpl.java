@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Searches for users in the database by username entered
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -24,16 +27,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        // Searches for user based on username
         ca.sheridancollege.amos.beans.User user = da.findUserAccount(username);
+
+        // If the user is not found, an exception is thrown
         if (user == null) {
             System.out.println("User not found:" + username);
             throw new UsernameNotFoundException("User " + username + " was not found in the database");
         }
 
-        //Get a list of roles for that user
+        // Retrieves a list of roles for that user
         List<String> roleNames= da.getRolesById(user.getUserId());
 
-        // Change the list of the user's roles into a list of         GrantedAuthority
+        // Change the list of the user's roles into a list of GrantedAuthority
         List<GrantedAuthority> grantList= new
                 ArrayList<GrantedAuthority>();
         if (roleNames!= null) {
@@ -42,10 +48,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
         }
 
-        // Create a user based on the information above.
-        // import statement could be fixed
+        // Creates a user based on the information above
         UserDetails userDetails= (UserDetails) new org.springframework.security.core.userdetails.User(user.getEmail(), user.getEncryptedPassword(), grantList);
         return userDetails;
-
     }
 }

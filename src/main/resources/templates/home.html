@@ -1,8 +1,4 @@
-<!--
-This HTML file defines the structure and layout of the home page
-which includes a header, footer, and title
-Name: Amos Turner
--->
+<!--TODO add comments-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,23 +15,19 @@ Name: Amos Turner
 <body>
 <header th:insert ="fragments/header.html :: header"></header>
 
-<br>
-
-<h2>
+<h2 id="title">
     Contact Information
-    <p>Navigate to the secured pages by clicking
-        <a href="/secure" th:href="@{/secure}">here</a></p>
-
 </h2>
-<br>
-<section>
+
+<section class="flex-container">
+
     <div>
         <h4>placeholder</h4>
         <h4>placeholder</h4>
         <h4>placeholder</h4>
     </div>
     <div>
-        <p style="width: 200px">Placeholder exaplaining the application</p>
+        <p style="width: 200px">Placeholder</p>
     </div>
 </section>
 <footer th:replace ="fragments/footer.html :: footer"></footer>

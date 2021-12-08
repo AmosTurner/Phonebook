@@ -1,3 +1,4 @@
+ /*TODO add comments*/
 body {
     background-color: #00003f;
 }
@@ -161,4 +162,8 @@ li a:hover {
 
 .flex-container > div {
     padding: 20px;
+}
+
+.error {
+    color: red;
 }

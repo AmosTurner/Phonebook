@@ -1,3 +1,4 @@
+-- Insertion of four contacts into contact table
 INSERT INTO contacts(Name, PhoneNumber, Address, Email)
 VALUES('Steve Penney', '647-111-111', '1 Main st', 'amos@gmail.com');
 

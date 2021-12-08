@@ -1,3 +1,4 @@
+<!--TODO add comments-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-
@@ -14,15 +15,33 @@ springsecurity5">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
-<h1>Register Here!</h1>
-<div id="error" class="error"></div>
+
+<header th:insert ="fragments/header.html :: header"></header>
+<!--add error message for invalid password-->
+<h2>Register Here</h2>
+
+<!--TODO add comments-->
 <form name="form" action="#" th:action="@{/register}" method="post"
-      onsubmit="return verify()">
-    Email: <input type= "email" name="username" /><br>
-    Password: <input type="password" name="password" /><br>
-    Verify Password: <input type="password" name="verifyPassword" /><br>
+      onsubmit="return passwordValidation()">
+    <label>Email:</label>
+    <input type= "email" placeholder="Email..." name="username" /><br>
+    <label>Password:</label>
+    <input type="password" placeholder="Password..." name="password" /><br>
+    <label>Verify Password: </label>
+    <input type="password" placeholder="Re-enter password..." name="verifyPassword" /><br>
+<!--    <p>Choose how you want to sort the teams:</p>-->
+<!--    <input type="radio" name="order" value="teamName" th:field="*{sort}"/>-->
+<!--    <label>by name</label><br>-->
+<!--    <input type="radio" name="order" value="continent" th:field="*{sort}"/>-->
+<!--    <label>by continent</label><br>-->
+<!--    <input type="radio" name="order" value="points" th:field="*{sort}"/>-->
+<!--    <label>by points</label><br>-->
+<!--    <input type="submit" value="Sort Teams"/><br>-->
     <input type="submit" value="Add User">
+    <div id="error" class="error">test</div>
 </form>
-<p><a href="/home" th:href="@{/home}">Back to home page</a></p>
+
+<footer th:replace ="fragments/footer.html :: footer"></footer>
+
 </body>
 </html>

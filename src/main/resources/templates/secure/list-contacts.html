@@ -1,13 +1,7 @@
-<!--
-This HTML file defines the structure and layout of the displayResults page
-which displays all the teams in the H2 database in a tabular format
-which can be sorted by name, continent, or points
-Name: Amos Turner
--->
+<!--TODO add comments-->
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<!--add html fragments for header and footer-->
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Results</title>
@@ -22,11 +16,41 @@ Name: Amos Turner
 <body>
 <header th:insert ="fragments/header.html :: header"></header>
 
-<br>
+<!--TODO add comments-->
 <div sec:authorize="isAuthenticated()">
     User's Name: <span sec:authentication="name"></span><br>
     Roles: <span sec:authentication="principal.authorities">
+
+    <!--<h3 th:each="c: ${contactList}">-->
+    <!--    <h1>test</h1>-->
+    <!--    <a href="#"-->
+    <!--       th:onclick="'getContact('+ ${c.id} + ')'"-->
+    <!--       th:text="${c.name}"></a>-->
+    <!--    <div th:id="'contact' + ${c.id}"></div>-->
+    <!--</h3>-->
 </span><br><br>
+    <section>
+        <h2>List of Contacts</h2>
+        <table style="width:50%" th:if="${contactList != null && contactList !=''}">
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr th:each="c:${contactList}">
+                <td th:text="${c.name}"></td>
+                <td th:text="${c.phoneNumber}"></td>
+                <td th:text="${c.address}"></td>
+                <td th:text="${c.email}"></td>
+                <td><a th:href="@{'contacts/' + ${c.id}}">Edit</a>
+                <td><a th:href="@{'contacts/' + ${c.id}}">Delete</a>
+            </tr>
+        </table>
+    </section>
+    <br>
     <div>
         <form method="get" action="#" th:action="@{/logout}">
             <input type="submit" value="Logout" />
@@ -34,32 +58,7 @@ Name: Amos Turner
     </div>
 </div>
 
-<section>
-    <h2>List of Contacts</h2>
-    <table style="width:50%" th:if="${contactList != null && contactList !=''}">
-        <tr>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Email</th>
-        </tr>
-        <tr th:each="c:${contactList}">
-            <td th:text="${c.name}"></td>
-            <td th:text="${c.phoneNumber}"></td>
-            <td th:text="${c.address}"></td>
-            <td th:text="${c.email}"></td>
-            <td><a th:href="@{'contacts/' + ${c.id}}">Edit</a>
-            <td><a th:href="@{'contacts/' + ${c.id}}">Delete</a>
-        </tr>
-    </table>
-</section>
-<!--<h3 th:each="c: ${contactList}">-->
-<!--    <h1>test</h1>-->
-<!--    <a href="#"-->
-<!--       th:onclick="'getContact('+ ${c.id} + ')'"-->
-<!--       th:text="${c.name}"></a>-->
-<!--    <div th:id="'contact' + ${c.id}"></div>-->
-<!--</h3>-->
+
 <br>
 <footer th:replace ="fragments/footer.html :: footer"></footer>
 

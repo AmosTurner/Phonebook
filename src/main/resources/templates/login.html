@@ -1,3 +1,4 @@
+<!--TODO add comments-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
@@ -11,28 +12,32 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
-<h1> Please enter your login credentials!</h1>
 
+<header th:insert ="fragments/header.html :: header"></header>
+
+<h2> Please enter your login credentials</h2>
+
+<!--TODO add comments-->
 <form method="post" th:action="@{/login}">
-
-    UserName : <input type="text" name="username"><br>
-    Password : <input type="password" name="password"><br>
+    <label>Email:</label>
+    <input type="text" placeholder="Email..." name="username"><br>
+    <label>Password:</label>
+    <input type="password" placeholder="Password..." name="password"><br>
     <input type="submit" name="loginBtn" value="Login">
     <div th:if="${param.error}">
         <div class="error">
             Invalid username or password
         </div>
     </div>
+<!--    what does this do?-->
     <div th:if="${param.logout}">
         <div class="error">
             You have been logged out!
         </div>
     </div>
-
-
 </form>
 
-<p><a href="/home" th:href="@{/home}">Back to home page</a></p>
+<footer th:replace ="fragments/footer.html :: footer"></footer>
 
 </body>
 
